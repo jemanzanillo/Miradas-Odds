@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Miradas! Lac Banquet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <main class="app">
+    <header class="header">
+      <p class="header__date">02 · 15 · 2026</p>
+      <h1 class="header__title">¡Miradas!</h1>
+      <p class="header__subtitle">Lac Banquet</p>
+      <div class="header__suits">
+        <span>♠</span>
+        <span class="suit-red">♥</span>
+        <span class="crown">♛</span>
+        <span class="suit-red">♦</span>
+        <span>♣</span>
+      </div>
+    </header>
+
+    <!-- Screen 1: Name Entry -->
+    <section id="screen-name" class="screen screen--name active">
+      <form class="form" id="form-name">
+        <label class="label" for="input-name">What is your name?</label>
+        <input type="text" id="input-name" placeholder="Your name..." autocomplete="name" required>
+        <button type="submit" class="btn btn--primary">Continue</button>
+      </form>
+    </section>
+
+    <!-- Screen 2: King Selection -->
+    <section id="screen-selection" class="screen screen--selection">
+      <label class="label">Which King will the Queen choose?</label>
+      <div class="king-grid" id="king-grid">
+        <!-- Cards injected by JS -->
+      </div>
+      <button type="button" class="btn btn--primary" id="btn-bet" disabled>
+        <span>♠</span> Place Your Bet <span>♠</span>
+      </button>
+    </section>
+
+    <!-- Screen 3: Confirmation -->
+    <section id="screen-confirmation" class="screen screen--confirmation">
+      <p class="label" id="confirmation-text">Your prediction, <span id="confirmation-name"></span>:</p>
+      <div class="confirmation-card" id="confirmation-card">
+        <!-- Selected card injected by JS -->
+      </div>
+      <p class="confirmation-label" id="confirmation-label">King The Golden Boy ♠</p>
+      <button type="button" class="btn btn--secondary" id="btn-change">Change prediction</button>
+    </section>
+  </main>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Miradas! Lac Banquet — Live Display</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body class="display">
+  <main class="app">
+    <header class="header">
+      <p class="header__date">02 · 15 · 2026</p>
+      <h1 class="header__title">¡Miradas!</h1>
+      <p class="header__subtitle">Lac Banquet</p>
+      <div class="header__suits">
+        <span>♠</span>
+        <span class="suit-red">♥</span>
+        <span class="crown">♛</span>
+        <span class="suit-red">♦</span>
+        <span>♣</span>
+      </div>
+      <p class="display__prompt">Who will be chosen? — <span id="prediction-count">0</span> predictions</p>
+    </header>
+
+    <div class="king-grid" id="king-grid">
+      <!-- Cards injected by display.js -->
+    </div>
+  </main>
+  <script src="../js/display.js"></script>
+</body>
+</html>
