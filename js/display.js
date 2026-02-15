@@ -28,10 +28,29 @@ function getLeadingIds() {
   return Object.entries(votes).filter(([, v]) => v === max).map(([id]) => id);
 }
 
-function renderCard(king, voteCount, percent, isLeading) {
+function getEliminatedIds() {
+  // Sort kings by vote count ascending
+  const sorted = KINGS.map(king => ({ id: king.id, votes: votes[king.id] }))
+    .sort((a, b) => a.votes - b.votes);
+  
+  const eliminated = [];
+  let i = 0;
+  while (i < 4 && i < sorted.length) {
+    eliminated.push(sorted[i].id);
+    i++;
+  }
+  // Include ties: if the next has the same votes as the last included, include it
+  while (i < sorted.length && sorted[i].votes === sorted[i-1].votes) {
+    eliminated.push(sorted[i].id);
+    i++;
+  }
+  return eliminated;
+}
+
+function renderCard(king, voteCount, percent, isLeading, isEliminated) {
   const suitClass = king.isRed ? 'suit-red' : '';
   const card = document.createElement('div');
-  card.className = `king-card${isLeading ? ' leading' : ''}`;
+  card.className = `king-card${isLeading ? ' leading' : ''}${isEliminated ? ' eliminated' : ''}`;
   card.dataset.kingId = king.id;
 
   card.innerHTML = `
@@ -50,6 +69,7 @@ function renderCard(king, voteCount, percent, isLeading) {
 function updateDisplay() {
   const total = getTotalVotes();
   const leadingIds = getLeadingIds();
+  const eliminatedIds = getEliminatedIds();
 
   document.getElementById('prediction-count').textContent = total;
 
@@ -62,7 +82,8 @@ function updateDisplay() {
       const v = votes[king.id];
       const percent = Math.round((v / totalPct) * 100);
       const isLeading = leadingIds.includes(king.id) && v > 0;
-      const card = renderCard(king, v, percent, isLeading);
+      const isEliminated = eliminatedIds.includes(king.id);
+      const card = renderCard(king, v, percent, isLeading, isEliminated);
       cardElements.push({ el: card, king });
       grid.appendChild(card);
     });
@@ -71,7 +92,9 @@ function updateDisplay() {
       const v = votes[king.id];
       const percent = Math.round((v / totalPct) * 100);
       const isLeading = leadingIds.includes(king.id) && v > 0;
+      const isEliminated = eliminatedIds.includes(king.id);
       el.classList.toggle('leading', isLeading);
+      el.classList.toggle('eliminated', isEliminated);
       el.querySelector('.king-card__votes').textContent =
         `${v} vote${v !== 1 ? 's' : ''} (${percent}%)`;
       el.querySelector('.king-card__bar-fill').style.width = `${percent}%`;

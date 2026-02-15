@@ -343,12 +343,17 @@ input[type="text"]::placeholder {
   transition: width 0.3s ease;
 }
 
-.king-card.leading .king-card__bar-fill {
-  background: var(--gold);
-}
-
 .king-card.leading {
   animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.king-card.eliminated .king-card__bar-fill {
+  background: var(--red-suit);
+}
+
+.king-card.eliminated {
+  border-color: var(--red-suit);
+  box-shadow: 0 0 0 2px rgba(201, 76, 76, 0.3), 0 6px 16px var(--shadow);
 }
 
 @keyframes pulse-glow {
