@@ -132,17 +132,34 @@ function init() {
   });
 
   // Screen 2: Bet
-  btnBet.addEventListener('click', () => {
+  btnBet.addEventListener('click', async () => {
     if (!selectedKingId) return;
     const king = KINGS.find((k) => k.id === selectedKingId);
     const name = getStored()?.name || inputName.value.trim() || 'Guest';
-    setStored({ name, kingId: selectedKingId });
-    confirmationName.textContent = name;
-    confirmationText.innerHTML = `Your prediction, <span id="confirmation-name">${name}</span>:`;
-    confirmationLabel.textContent = `King ${king.name} ${king.suit}`;
-    confirmationCard.innerHTML = '';
-    confirmationCard.appendChild(renderKingCard(king, { selected: true, clickable: false }));
-    showScreen('screen-confirmation');
+    const prevText = btnBet.innerHTML;
+    btnBet.disabled = true;
+    btnBet.textContent = 'Submitting…';
+    try {
+      const res = await fetch('/api/vote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: name.trim(), kingId: selectedKingId })
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'Failed to submit vote');
+      setStored({ name, kingId: selectedKingId });
+      confirmationName.textContent = name;
+      confirmationText.innerHTML = `Your prediction, <span id="confirmation-name">${name}</span>:`;
+      confirmationLabel.textContent = `King ${king.name} ${king.suit}`;
+      confirmationCard.innerHTML = '';
+      confirmationCard.appendChild(renderKingCard(king, { selected: true, clickable: false }));
+      showScreen('screen-confirmation');
+    } catch (err) {
+      alert(err.message || 'Could not submit vote. Please try again.');
+    } finally {
+      btnBet.disabled = false;
+      btnBet.innerHTML = prevText;
+    }
   });
 
   // Screen 3: Change prediction

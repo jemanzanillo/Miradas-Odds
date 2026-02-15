@@ -1,6 +1,6 @@
 /**
  * Miradas! Lac Banquet — Display Page
- * Simulated real-time vote counts for demo (no backend).
+ * Fetches live vote counts from API and shows QR code for voting.
  */
 
 const KINGS = [
@@ -14,7 +14,7 @@ const KINGS = [
   { id: 'heartbreaker', name: 'The Heartbreaker', suit: '♣', isRed: false },
 ];
 
-// Simulated vote counts — randomly incremented
+// Vote counts from API
 let votes = KINGS.reduce((acc, k) => ({ ...acc, [k.id]: 0 }), {});
 let cardElements = [];
 
@@ -79,30 +79,32 @@ function updateDisplay() {
   }
 }
 
-function simulateVote() {
-  // Randomly increment a King's votes
-  const idx = Math.floor(Math.random() * KINGS.length);
-  votes[KINGS[idx].id]++;
-  updateDisplay();
+async function fetchVotes() {
+  try {
+    const res = await fetch('/api/votes');
+    const data = await res.json();
+    if (data?.counts) {
+      votes = KINGS.reduce((acc, k) => ({ ...acc, [k.id]: Number(data.counts[k.id]) || 0 }), {});
+      updateDisplay();
+    }
+  } catch (err) {
+    console.warn('Failed to fetch votes:', err);
+  }
 }
 
 function init() {
-  // Initial render with some seed votes for demo
   votes = KINGS.reduce((acc, k) => ({ ...acc, [k.id]: 0 }), {});
-  votes['historian'] = 1;
-  votes['voice'] = 1;
 
-  updateDisplay();
-
-  // Simulate new votes every 3–6 seconds
-  function scheduleNext() {
-    const delay = 3000 + Math.random() * 3000;
-    setTimeout(() => {
-      simulateVote();
-      scheduleNext();
-    }, delay);
+  // QR code pointing to voting URL
+  const voteUrl = window.location.origin + '/';
+  const qrImg = document.getElementById('qr-code');
+  if (qrImg) {
+    qrImg.src = 'https://api.qrserver.com/v1/create-qr-code/?' +
+      new URLSearchParams({ size: '160x160', data: voteUrl }).toString();
   }
-  scheduleNext();
+
+  fetchVotes();
+  setInterval(fetchVotes, 5000);
 }
 
 if (document.readyState === 'loading') {
