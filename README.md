@@ -19,6 +19,8 @@ A mobile-first prediction app for the Lac Banquet event. Attendees vote for whic
 
 Vercel will inject `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` into your project.
 
+**Important:** After connecting Upstash, you must **redeploy** for the env vars to be available. Go to Vercel → your project → Deployments → click the ⋮ menu on the latest deployment → Redeploy.
+
 ### 2. Deploy to Vercel
 
 ```bash
@@ -37,3 +39,11 @@ Or connect your GitHub repo in the Vercel dashboard for automatic deployments.
 
 - `POST /api/vote` — Submit a vote. Body: `{ "name": "string", "kingId": "string" }`
 - `GET /api/votes` — Fetch current vote counts.
+
+## Troubleshooting
+
+**"Database not configured"** — Usually means env vars aren't available to the deployment:
+
+1. **Redeploy** after connecting Upstash — env vars are injected only on new deployments.
+2. **Verify env vars** — In Vercel → Project Settings → Environment Variables, confirm `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` exist (or `KV_REST_API_URL` / `KV_REST_API_TOKEN`).
+3. **Manual setup** — If they're missing, copy them from [Upstash Console](https://console.upstash.com/) → your database → REST API, and add them in Vercel Environment Variables.

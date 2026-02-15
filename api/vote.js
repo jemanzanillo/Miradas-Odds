@@ -9,8 +9,8 @@ const COUNTS_KEY = 'miradas:counts';
 const VOTERS_KEY = 'miradas:voters';
 
 function redis() {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
+  const token = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
   if (!url || !token) {
     throw new Error('Missing UPSTASH_REDIS_REST_URL or UPSTASH_REDIS_REST_TOKEN');
   }
@@ -69,7 +69,9 @@ export default async function handler(req, res) {
   } catch (err) {
     console.error('vote error:', err);
     if (err.message?.includes('Missing')) {
-      return res.status(503).json({ error: 'Database not configured' });
+      return res.status(503).json({
+        error: 'Database not configured. Connect Upstash Redis in Vercel Storage, then redeploy.'
+      });
     }
     return res.status(500).json({ error: 'Failed to record vote' });
   }
