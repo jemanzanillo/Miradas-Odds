@@ -49,7 +49,7 @@ export default async function handler(req, res) {
     const client = redis();
     const oldKing = await client.hget(VOTERS_KEY, trimmedName);
 
-    if (oldKing && oldKing !== kingId) {
+    if (oldKing) {
       await client.hincrby(COUNTS_KEY, oldKing, -1);
     }
     await client.hset(VOTERS_KEY, trimmedName, kingId);
