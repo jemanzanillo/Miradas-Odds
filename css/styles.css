@@ -137,6 +137,7 @@ input[type="text"]::placeholder {
 
 /* King card */
 /* Enhanced 3D card effect */
+/* Enhanced 3D card effect and proper layout */
 .king-card {
   background: var(--card-bg);
   border-radius: 16px;
@@ -144,16 +145,48 @@ input[type="text"]::placeholder {
     0 2px 8px 0 rgba(92, 45, 59, 0.10),
     0 8px 24px 0 rgba(92, 45, 59, 0.10),
     0 1.5px 4px 0 rgba(184, 134, 11, 0.06);
-  padding: 1.25rem 1rem 1.5rem 1rem;
+  padding: 0;
   position: relative;
+  min-width: 170px;
+  min-height: 170px;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  min-height: 170px;
+  align-items: stretch;
+  justify-content: stretch;
   transition: box-shadow 0.25s, border-color 0.2s, transform 0.2s;
   border: 2.5px solid transparent;
   cursor: pointer;
   perspective: 800px;
+  overflow: visible;
+}
+.king-card__inner {
+  width: 100%;
+  height: 100%;
+  min-height: 170px;
+  min-width: 170px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: stretch;
+  position: relative;
+  text-align: center;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+.king-card__front, .king-card__back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  min-height: 170px;
+  min-width: 170px;
+  box-sizing: border-box;
+  padding: 1.25rem 1rem 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 .king-card:hover {
   box-shadow:

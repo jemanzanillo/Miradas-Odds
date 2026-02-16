@@ -8,7 +8,7 @@ const KING_IDS = [
 const COUNTS_KEY = 'miradas:counts';
 const VOTERS_KEY = 'miradas:voters';
 const VERSION_KEY = 'miradas:version';
-const VERSION = '1.1'; // Update this to reset votes on next deployment
+const VERSION = '1.2'; // Update this to reset votes on next deployment
 
 function redis() {
   const url = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
