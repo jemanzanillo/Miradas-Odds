@@ -40,6 +40,15 @@ Or connect your GitHub repo in the Vercel dashboard for automatic deployments.
 - `POST /api/vote` — Submit a vote. Body: `{ "name": "string", "kingId": "string" }`
 - `GET /api/votes` — Fetch current vote counts.
 
+## Resetting Votes
+
+To reset all votes (e.g., for a new event round), update the `VERSION` constant in `api/vote.js` to a new value and redeploy. This will clear all stored votes and voter data.
+
+Example:
+```javascript
+const VERSION = '1.1'; // Change this number to reset votes
+```
+
 ## Troubleshooting
 
 **"Database not configured"** — Usually means env vars aren't available to the deployment:

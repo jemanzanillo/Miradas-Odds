@@ -54,14 +54,29 @@ function renderCard(king, voteCount, percent, isLeading, isEliminated) {
   card.dataset.kingId = king.id;
 
   card.innerHTML = `
-    <span class="king-card__corner king-card__corner--tl ${suitClass}">K ${king.suit}</span>
-    <span class="king-card__corner king-card__corner--br ${suitClass}">K ${king.suit}</span>
-    <span class="king-card__crown ${suitClass}">♛</span>
-    <span class="king-card__suit ${suitClass}">${king.suit}</span>
-    <span class="king-card__name">${king.name}</span>
-    <span class="king-card__votes">${voteCount} vote${voteCount !== 1 ? 's' : ''} (${percent}%)</span>
-    <div class="king-card__bar"><div class="king-card__bar-fill" style="width: ${percent}%"></div></div>
+    <div class="king-card__inner">
+      <div class="king-card__front">
+        <span class="king-card__corner king-card__corner--tl ${suitClass}">K ${king.suit}</span>
+        <span class="king-card__corner king-card__corner--br ${suitClass}">K ${king.suit}</span>
+        <span class="king-card__crown ${suitClass}">♛</span>
+        <span class="king-card__suit ${suitClass}">${king.suit}</span>
+        <span class="king-card__name">${king.name}</span>
+      </div>
+      <div class="king-card__back">
+        <span class="king-card__corner king-card__corner--tl ${suitClass}">K ${king.suit}</span>
+        <span class="king-card__corner king-card__corner--br ${suitClass}">K ${king.suit}</span>
+        <span class="king-card__crown ${suitClass}">♛</span>
+        <span class="king-card__suit ${suitClass}">${king.suit}</span>
+        <span class="king-card__name">${king.name}</span>
+        <span class="king-card__votes">${voteCount} vote${voteCount !== 1 ? 's' : ''} (${percent}%)</span>
+        <div class="king-card__bar"><div class="king-card__bar-fill" style="width: ${percent}%"></div></div>
+      </div>
+    </div>
   `;
+
+  card.addEventListener('click', () => {
+    card.classList.toggle('flipped');
+  });
 
   return card;
 }
@@ -95,9 +110,12 @@ function updateDisplay() {
       const isEliminated = eliminatedIds.includes(king.id);
       el.classList.toggle('leading', isLeading);
       el.classList.toggle('eliminated', isEliminated);
-      el.querySelector('.king-card__votes').textContent =
-        `${v} vote${v !== 1 ? 's' : ''} (${percent}%)`;
-      el.querySelector('.king-card__bar-fill').style.width = `${percent}%`;
+      const back = el.querySelector('.king-card__back');
+      if (back) {
+        back.querySelector('.king-card__votes').textContent =
+          `${v} vote${v !== 1 ? 's' : ''} (${percent}%)`;
+        back.querySelector('.king-card__bar-fill').style.width = `${percent}%`;
+      }
     });
   }
 }
