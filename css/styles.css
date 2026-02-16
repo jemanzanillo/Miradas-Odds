@@ -136,19 +136,31 @@ input[type="text"]::placeholder {
 }
 
 /* King card */
+/* Enhanced 3D card effect */
 .king-card {
   background: var(--card-bg);
-  border-radius: 12px;
-  box-shadow: 0 4px 12px var(--shadow);
-  padding: 1rem;
+  border-radius: 16px;
+  box-shadow:
+    0 2px 8px 0 rgba(92, 45, 59, 0.10),
+    0 8px 24px 0 rgba(92, 45, 59, 0.10),
+    0 1.5px 4px 0 rgba(184, 134, 11, 0.06);
+  padding: 1.25rem 1rem 1.5rem 1rem;
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 160px;
-  transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s;
-  border: 2px solid transparent;
+  min-height: 170px;
+  transition: box-shadow 0.25s, border-color 0.2s, transform 0.2s;
+  border: 2.5px solid transparent;
   cursor: pointer;
+  perspective: 800px;
+}
+.king-card:hover {
+  box-shadow:
+    0 6px 24px 0 rgba(92, 45, 59, 0.18),
+    0 12px 32px 0 rgba(92, 45, 59, 0.12);
+  transform: translateY(-2px) scale(1.025) rotateX(2deg);
+  z-index: 2;
 }
 
 .king-card:hover {

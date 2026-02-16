@@ -8,7 +8,7 @@ const KING_IDS = [
 const COUNTS_KEY = 'miradas:counts';
 const VOTERS_KEY = 'miradas:voters';
 const VERSION_KEY = 'miradas:version';
-const VERSION = '1.0'; // Update this to reset votes on next deployment
+const VERSION = '1.1'; // Update this to reset votes on next deployment
 
 function redis() {
   const url = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
@@ -33,8 +33,21 @@ export default async function handler(req, res) {
   }
 
   try {
+    // Parse and validate input
+    const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body || {};
+    const { name, kingId } = body;
+    if (!name || typeof name !== 'string') {
+      return res.status(400).json({ error: 'Name is required' });
+    }
+    const trimmedName = name.trim().slice(0, 200);
+    if (!trimmedName) {
+      return res.status(400).json({ error: 'Name cannot be empty' });
+    }
+    if (!kingId || !KING_IDS.includes(kingId)) {
+      return res.status(400).json({ error: 'Invalid king selection' });
+    }
+
     const client = redis();
-    
     // Check version and reset if needed
     const storedVersion = await client.get(VERSION_KEY);
     if (storedVersion !== VERSION) {
@@ -42,7 +55,6 @@ export default async function handler(req, res) {
       await client.set(VERSION_KEY, VERSION);
     }
     const oldKing = await client.hget(VOTERS_KEY, trimmedName);
-
     if (oldKing) {
       await client.hincrby(COUNTS_KEY, oldKing, -1);
     }
